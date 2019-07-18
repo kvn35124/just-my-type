@@ -45,7 +45,9 @@ $('body').keypress(function (e) {
         // $('#feedback').addClass('glyphicon glyphicon-ok');
         // $('#feedback').removeClass('glyphicon glyphicon-remove');
         if (letterI === sentences[sentI][-1]){
-            $('<span class=glyphicon glyphicon-ok></span>').appendTo('#feedback');
+            // $('<span class=glyphicon glyphicon-ok></span>').appendTo('#feedback');
+            let correct = $('<span class="glyphicon glyphicon-ok"></span>')
+            $('#feedback').append(correct)
            sentI++;
            $('#sentence').append(sentences[sentI]);
        }
