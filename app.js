@@ -42,20 +42,18 @@ $('body').keypress(function (e) {
     if (e.which === sentences[0].charCodeAt(letterI)) {
         letterI++;
         $('#yellow-block').css('marginLeft', '+=19px');
-        // $('#feedback').addClass('glyphicon glyphicon-ok');
-        // $('#feedback').removeClass('glyphicon glyphicon-remove');
+        let correct = $('<span class="glyphicon glyphicon-ok"></span>');
+            $('#feedback').append(correct);
+    } else {
+        let incorrect = $('<span class="glyphicon glyphicon-ok"></span');
+        $('#feedback').append(incorrect);
+    }
         if (letterI === sentences[sentI][-1]){
-            // $('<span class=glyphicon glyphicon-ok></span>').appendTo('#feedback');
-            let correct = $('<span class="glyphicon glyphicon-ok"></span>')
-            $('#feedback').append(correct)
            sentI++;
            $('#sentence').append(sentences[sentI]);
        }
-    } else {
-        $('<span class=glyphicon glyphicon-remove></span>').appendTo('#feedback');
-        $('<span></span>').removeClass('.glyphicon glyphicon-ok');
     }
-})
+)
 
 $('body').keypress(function (e) {
     if (letterI === sentI.length){
