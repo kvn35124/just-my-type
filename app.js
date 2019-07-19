@@ -6,14 +6,20 @@ let sentences = ['ten ate neite ate nee enet ite ate inet ent eate',
     'itant eate anot eat nato inate eat anot tain eat',
     'nee ene ate ite tent tiet ent ine ene ete ene ate'];
 
-
-$('#keyboard-upper-container').hide();
-
 let sentI = 0;
 let letterI = 0;
 
+startTime = new Date();
+errorCounter = 0;
+
+
+
+
+$('#keyboard-upper-container').hide();
 $('#sentence').append(sentences[sentI]);
 $('#target-letter').append(sentences[sentI][letterI]);
+
+
 
 
 
@@ -36,46 +42,73 @@ $('body').keyup(function (e) {
 })
 
 $('body').keypress(function (e) {
-    $('#' + e.which).addClass('highlight');
-    // letterI++;
-    $('#target-letter').text(sentences[sentI][letterI]);
-    if (e.which === sentences[0].charCodeAt(letterI)) {
-        letterI++;
-        $('#yellow-block').css('marginLeft', '+=19px');
-        let correct = $('<span class="glyphicon glyphicon-ok"></span>');
-            $('#feedback').append(correct);
+
+    highlightKey(e.which);
+    moveBlock();
+    if (sentI === sentences.length) {
+        gameOver();
+        return;
+    }
+    if (letterI === (sentences[sentI].length) - 1) {
+        loadNewSentence();
     } else {
-        let incorrect = $('<span class="glyphicon glyphicon-ok"></span');
+        checkRightOrWrong(e.which);
+        adjustTarget();
+    }
+})
+
+function checkRightOrWrong(key) {
+    if (key === sentences[sentI].charCodeAt(letterI)) {
+        let correct = $('<span class="glyphicon glyphicon-ok"></span>');
+        $('#feedback').append(correct);
+    } else {
+        let incorrect = $('<span class="glyphicon glyphicon-remove"></span');
+        errorCounter++;
         $('#feedback').append(incorrect);
     }
-        if (letterI === sentences[sentI][-1]){
-           sentI++;
-           $('#sentence').append(sentences[sentI]);
-       }
-    }
-)
+}
 
-$('body').keypress(function (e) {
-    if (letterI === sentI.length){
-         $('#sentence').remove(sentences[sentI]);
-        sentI++;
-        $('#sentence').append(sentences[sentI]);
+function adjustTarget() {
+    letterI++;
+    $('#target-letter').text(sentences[sentI][letterI]);
+}
+
+function moveBlock() {
+    $('#yellow-block').css('left', '+=17.5px');
+}
+
+function highlightKey(key) {
+    $('#' + key).addClass('highlight');
+}
+
+
+function loadNewSentence() {
+    letterI = 0;
+    sentI++;
+    if (sentI === sentences.length) {
+        return;
     }
-})
+    $('#sentence').text(sentences[sentI]);
+    $('#target-letter').text(sentences[sentI][letterI])
+    $('#yellow-block').css('left', '0px');
+    $('#feedback').empty();
+}
+
+function gameOver() {
+    let endTime = new Date();
+    numberOfWords = 54;
+    diff = Math.abs(startTime - endTime);
+    minutes = Math.floor((diff/1000)/60);
+    numberOfMistakes = errorCounter;
+    let wpm = (numberOfWords / minutes - 2 * numberOfMistakes);
+    alert('You typed ' + wpm + ' words per minute!');
+    console.log(endTime.getSeconds());
+    $('#prompt-container').prepend('<button onClick= "window.location.reload();">Play Again?</button>');
+}
+
+
+
+
+
 
 let charCount = 0
-
-$('body').keypress(function(e) {
-    if (e.which === sentences[0].charCodeAt(charCount)) {
-        charCount++;
-        console.log('Correct')
-    } else {
-        console.log('WRONG!!!')
-    }
-})
-
-// let numberOfWords = 54;
-
-// let numberOfMistakes =
-
-// let wpm = (numberOfWords / minutes - 2 * numberOfMistakes)
